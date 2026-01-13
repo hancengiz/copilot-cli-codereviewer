@@ -35,11 +35,9 @@ jobs:
           copilot --version
 
       - name: Authenticate with GitHub
-        env:
-          GH_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
         run: |
-          # Set up gh CLI auth with the token
-          echo "$GH_TOKEN" | gh auth login --with-token
+          # Set up gh CLI auth with the token (unset GH_TOKEN first to allow login)
+          echo "${{ secrets.GH_COPILOT_TOKEN }}" | gh auth login --with-token
           gh auth status
 
       - name: Run Code Review
