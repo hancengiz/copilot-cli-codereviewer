@@ -41,7 +41,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
           COPILOT_GITHUB_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
-          COPILOT_MODEL: gpt-4o
+          COPILOT_MODEL: claude-sonnet-4
         run: |
           chmod +x ./scripts/review-pr.sh
           ./scripts/review-pr.sh

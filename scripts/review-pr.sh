@@ -24,7 +24,7 @@ BITBUCKET_REPO_SLUG="${BITBUCKET_REPO_SLUG:-}"
 
 # Review tool configuration
 # Using GitHub Copilot CLI in non-interactive mode
-COPILOT_MODEL="${COPILOT_MODEL:-gpt-4o}"
+COPILOT_MODEL="${COPILOT_MODEL:-claude-sonnet-4}"
 
 # Output configuration
 OUTPUT_FILE="${OUTPUT_FILE:-/tmp/pr-review-output.md}"
