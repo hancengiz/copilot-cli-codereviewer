@@ -82,10 +82,9 @@ log_step "Fetching PR diff..."
 if command -v gh &> /dev/null; then
     DIFF=$(gh pr diff "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" 2>/dev/null || true)
 else
-    GITHUB_TOKEN="${GITHUB_TOKEN:-$COPILOT_GITHUB_TOKEN}"
     DIFF=$(curl -sL \
         -H "Accept: application/vnd.github.v3.diff" \
-        -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+        -H "Authorization: Bearer ${COPILOT_GITHUB_TOKEN}" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
         "https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${PR_NUMBER}")
 fi
