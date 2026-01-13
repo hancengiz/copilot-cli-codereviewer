@@ -30,6 +30,9 @@ COPILOT_MODEL="${COPILOT_MODEL:-gpt-5}"
 OUTPUT_FILE="${OUTPUT_FILE:-/tmp/pr-review-output.md}"
 MAX_COMMENT_LENGTH="${MAX_COMMENT_LENGTH:-65000}"
 
+# Version
+VERSION="1.0.0"
+
 # ============================================================================
 # Logging
 # ============================================================================
