@@ -40,7 +40,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          GITHUB_COPILOT_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
+          COPILOT_GITHUB_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
           COPILOT_MODEL: gpt-5
         run: |
           chmod +x ./scripts/review-pr.sh
