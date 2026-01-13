@@ -14,14 +14,9 @@ pipelines:
       - step:
           name: Automated Code Review
           script:
-            # Install GitHub CLI
-            - curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-            - chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
-            - echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-            - apt-get update && apt-get install -y gh
-
-            # Install Copilot extension
-            - gh extension install github/gh-copilot
+            # Install GitHub Copilot CLI
+            - npm install -g @github/copilot
+            - copilot --version
 
             # Run the review script
             - chmod +x ./scripts/review-pr.sh
@@ -30,8 +25,7 @@ pipelines:
             - export BITBUCKET_WORKSPACE=$BITBUCKET_WORKSPACE
             - export BITBUCKET_REPO_SLUG=$BITBUCKET_REPO_SLUG
             - export PR_NUMBER=$BITBUCKET_PR_ID
-            - export GH_TOKEN=$GH_COPILOT_TOKEN
-            - export REVIEW_COMMAND="gh copilot explain"
-            - export REVIEW_ARGS=""
+            - export GITHUB_COPILOT_TOKEN=$GH_COPILOT_TOKEN
+            - export COPILOT_MODEL=gpt-5
 
             - ./scripts/review-pr.sh

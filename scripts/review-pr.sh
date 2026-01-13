@@ -23,8 +23,8 @@ BITBUCKET_WORKSPACE="${BITBUCKET_WORKSPACE:-}"
 BITBUCKET_REPO_SLUG="${BITBUCKET_REPO_SLUG:-}"
 
 # Review tool configuration
-REVIEW_COMMAND="${REVIEW_COMMAND:-gh copilot explain}"
-REVIEW_ARGS="${REVIEW_ARGS:-}"
+# Using GitHub Copilot CLI in non-interactive mode
+COPILOT_MODEL="${COPILOT_MODEL:-gpt-5}"
 
 # Output configuration
 OUTPUT_FILE="${OUTPUT_FILE:-/tmp/pr-review-output.md}"
@@ -138,18 +138,19 @@ run_review() {
     local prompt
     prompt=$(generate_review_prompt)
 
-    log_info "Running code review with: $REVIEW_COMMAND"
+    log_info "Running code review with: copilot CLI (model: $COPILOT_MODEL)"
 
     # Combine prompt and diff
     local full_input="${prompt}
 ${diff}
 \`\`\`"
 
-    # Run the review command
-    # gh copilot explain reads from stdin or takes text as argument
-    # shellcheck disable=SC2086
-    echo "$full_input" | $REVIEW_COMMAND $REVIEW_ARGS 2>/dev/null || \
-        $REVIEW_COMMAND "$full_input" $REVIEW_ARGS
+    # Run Copilot CLI in non-interactive mode
+    # -p: Execute prompt in non-interactive mode
+    # -s: Silent mode (output only agent response, no stats)
+    # --allow-all-tools: Required for non-interactive mode
+    # --model: Specify the AI model
+    copilot -p "$full_input" --allow-all-tools -s --model "$COPILOT_MODEL"
 }
 
 # ============================================================================
@@ -251,7 +252,7 @@ ${comment}
 main() {
     log_info "Starting PR code review"
     log_info "Platform: $PLATFORM"
-    log_info "Review command: $REVIEW_COMMAND $REVIEW_ARGS"
+    log_info "Copilot model: $COPILOT_MODEL"
 
     # Validate required vars based on platform
     case "$PLATFORM" in

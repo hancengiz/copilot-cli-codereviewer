@@ -24,18 +24,15 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup GitHub CLI with Copilot
-        env:
-          GH_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install GitHub Copilot CLI
         run: |
-          # GitHub CLI is pre-installed on ubuntu-latest
-          gh --version
-
-          # Install Copilot extension
-          gh extension install github/gh-copilot
-
-          # Verify installation
-          gh copilot --version
+          npm install -g @github/copilot
+          copilot --version
 
       - name: Run Code Review
         env:
@@ -43,9 +40,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          GH_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
-          REVIEW_COMMAND: "gh copilot explain"
-          REVIEW_ARGS: ""
+          GITHUB_COPILOT_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
+          COPILOT_MODEL: gpt-5
         run: |
           chmod +x ./scripts/review-pr.sh
           ./scripts/review-pr.sh
