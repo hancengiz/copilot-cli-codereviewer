@@ -42,9 +42,6 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           COPILOT_GITHUB_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
           COPILOT_MODEL: claude-sonnet-4
-          DEBUG: "true"
         run: |
           chmod +x ./scripts/review-pr.sh
-          # Verify env var is set
-          echo "COPILOT_GITHUB_TOKEN is set: $([ -n "$COPILOT_GITHUB_TOKEN" ] && echo 'yes' || echo 'no')"
           ./scripts/review-pr.sh
