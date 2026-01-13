@@ -1,0 +1,17 @@
+# Environment files with secrets
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Output files
+/tmp/
+*.log
