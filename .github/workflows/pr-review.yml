@@ -1,0 +1,51 @@
+name: PR Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# Prevent concurrent reviews on the same PR
+concurrency:
+  group: pr-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  code-review:
+    name: Automated Code Review
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitHub CLI with Copilot
+        env:
+          GH_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
+        run: |
+          # GitHub CLI is pre-installed on ubuntu-latest
+          gh --version
+
+          # Install Copilot extension
+          gh extension install github/gh-copilot
+
+          # Verify installation
+          gh copilot --version
+
+      - name: Run Code Review
+        env:
+          PLATFORM: github
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
+          REVIEW_COMMAND: "gh copilot explain"
+          REVIEW_ARGS: ""
+        run: |
+          chmod +x ./scripts/review-pr.sh
+          ./scripts/review-pr.sh
