@@ -148,6 +148,12 @@ run_review() {
 ${diff}
 \`\`\`"
 
+    # Ensure COPILOT_GITHUB_TOKEN is exported for the copilot CLI
+    if [[ -n "${COPILOT_GITHUB_TOKEN:-}" ]]; then
+        export COPILOT_GITHUB_TOKEN
+        log_debug "Using COPILOT_GITHUB_TOKEN for authentication"
+    fi
+
     # Run Copilot CLI in non-interactive mode
     # -p: Execute prompt in non-interactive mode
     # -s: Silent mode (output only agent response, no stats)
