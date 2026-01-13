@@ -24,11 +24,14 @@ BITBUCKET_REPO_SLUG="${BITBUCKET_REPO_SLUG:-}"
 
 # Review tool configuration
 # Using GitHub Copilot CLI in non-interactive mode
-COPILOT_MODEL="${COPILOT_MODEL:-gpt-5}"
+COPILOT_MODEL="${COPILOT_MODEL:-claude-sonnet-4}"
 
 # Output configuration
 OUTPUT_FILE="${OUTPUT_FILE:-/tmp/pr-review-output.md}"
 MAX_COMMENT_LENGTH="${MAX_COMMENT_LENGTH:-65000}"
+
+# Version
+VERSION="1.0.0"
 
 # ============================================================================
 # Logging
@@ -144,6 +147,12 @@ run_review() {
     local full_input="${prompt}
 ${diff}
 \`\`\`"
+
+    # Ensure COPILOT_GITHUB_TOKEN is exported for the copilot CLI
+    if [[ -n "${COPILOT_GITHUB_TOKEN:-}" ]]; then
+        export COPILOT_GITHUB_TOKEN
+        log_debug "Using COPILOT_GITHUB_TOKEN for authentication"
+    fi
 
     # Run Copilot CLI in non-interactive mode
     # -p: Execute prompt in non-interactive mode
