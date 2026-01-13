@@ -34,6 +34,14 @@ jobs:
           npm install -g @github/copilot
           copilot --version
 
+      - name: Authenticate with GitHub
+        env:
+          GH_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
+        run: |
+          # Set up gh CLI auth with the token
+          echo "$GH_TOKEN" | gh auth login --with-token
+          gh auth status
+
       - name: Run Code Review
         env:
           PLATFORM: github
@@ -42,7 +50,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           GH_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
           COPILOT_GITHUB_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
-          COPILOT_MODEL: gpt-5
+          COPILOT_MODEL: gpt-4o
         run: |
           chmod +x ./scripts/review-pr.sh
           ./scripts/review-pr.sh
